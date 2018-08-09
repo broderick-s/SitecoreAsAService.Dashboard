@@ -24,7 +24,7 @@
                 v-if="categories">
                 <Collection 
                 :collection="categories[selectedCategoryIndex].Item[selectedCollectionIndex]" 
-                @save="fetchData"/>
+                @submit="fetchData"/>
             </div>
         </main>
     </div>
@@ -61,7 +61,7 @@ export default {
         fetchData () {
             this.error = this.categories = null;
             this.loading = true;
-            console.log(process.env.API_ENDPOINT_GET)
+
             getData(process.env.API_ENDPOINT_GET)
                 .then(data => {
                     this.categories = data.Menu;
