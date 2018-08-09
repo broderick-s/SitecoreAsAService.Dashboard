@@ -23,8 +23,8 @@
                 class="offset-5" 
                 size="md"
                 variant="outline-success"
-                @click="save">
-                Save Changes
+                @click="submit">
+                Submit
             </b-button>
         </div>
     </div>
@@ -65,8 +65,8 @@ export default {
             return "";
         },
 
-        save() {
-            postData(process.env.API_ENDPOINT_SAVE, this.updatedCollection)
+        submit() {
+            postData(process.env.API_ENDPOINT_SUBMIT, this.updatedCollection)
                 .then(data => console.log(data))
                 .catch(error => console.error(error));
             this.$emit('save');
