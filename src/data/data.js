@@ -1,6 +1,11 @@
 const getData = (url = '') => {
     return fetch(url)
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok) {
+                return response.json()
+            }
+            throw new Error('Network response failed.')
+        })
         .catch(error => console.error('Fetch Error =\n', error));
 }
 

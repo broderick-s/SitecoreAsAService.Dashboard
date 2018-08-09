@@ -23,8 +23,18 @@
                 class="page-content" 
                 v-if="categories">
                 <Collection 
-                :collection="categories[selectedCategoryIndex].Item[selectedCollectionIndex]" 
-                @submit="fetchData"/>
+                    :collection="categories[selectedCategoryIndex].Item[selectedCollectionIndex]" 
+                    @submit="submitted"
+                    @resetAlerts="resetAlerts"/>
+
+                <b-alert 
+                    class="offset-1 col-md-6"
+                    :show="submitSuccess"
+                    dismissible
+                    variant="success"
+                    @dismissed="submitSuccess=false">
+                    <p>Changes submitted successfully!</p>
+                </b-alert>
             </div>
         </main>
     </div>
@@ -49,7 +59,8 @@ export default {
             categories: null,
             selectedCategoryIndex: 0,
             selectedCollectionIndex: 0,
-            error: null
+            error: null,
+            submitSuccess: false
         }
     },
 
@@ -68,9 +79,12 @@ export default {
                     this.loading = false;
                 })
                 .catch(error => {
-                    console.log(error);
                     this.error = error;
             });
+        },
+        submitted() {
+            this.submitSuccess = true;
+            this.fetchData();
         }
     },
 
