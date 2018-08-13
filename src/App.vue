@@ -3,40 +3,46 @@
         <b-navbar
             toggleable="md" 
             type="dark" 
-            variant="dark">
+            variant="dark"
+            :sticky="true"
+            class="navbar">
             <b-navbar-brand>
-                <img src="./assets/sitecore-logo.png" alt="Sitecore">
+                <a href="/sitecore/shell/sitecore/client/Applications/Launchpad">
+                    <img src="./assets/sitecore-logo.png" alt="Sitecore">
+                </a>
             </b-navbar-brand>
         </b-navbar>
-        
-        <main>
-            <div 
-                class="loading" 
-                v-if="loading">
-                Loading...
-            </div>
-            <SidebarNavigation 
-                :categories="categories" 
-                v-if="categories"
-                @selectedCollection="changeCollection"/>
-            <div 
-                class="page-content" 
-                v-if="categories">
-                <Collection 
-                    :collection="categories[selectedCategoryIndex].Item[selectedCollectionIndex]" 
-                    @submit="submitted"
-                    @resetAlerts="resetAlerts"/>
+        <div class="container-fluid m-0 h-100 p-0">
+            <div class="row m-0 h-100 p-0">
+                <div 
+                    class="loading" 
+                    v-if="loading">
+                    Loading...
+                </div>
+                <SidebarNavigation 
+                    :categories="categories" 
+                    :selectedCategory="selectedCategoryIndex"
+                    :selectedCollection="selectedCollectionIndex"
+                    v-if="categories"
+                    @selectedCollection="changeCollection"/>
+                <main 
+                    v-if="categories"
+                    class="col-md-9 ml-sm-auto col-lg-10 px-4 bg-light">
+                    <Collection 
+                        :collection="categories[selectedCategoryIndex].Item[selectedCollectionIndex]" 
+                        @submit="submitted"/>
 
-                <b-alert 
-                    class="offset-1 col-md-6"
-                    :show="submitSuccess"
-                    dismissible
-                    variant="success"
-                    @dismissed="submitSuccess=false">
-                    <p>Changes submitted successfully!</p>
-                </b-alert>
+                    <b-alert 
+                        class="offset-1 col-md-6"
+                        :show="submitSuccess"
+                        dismissible
+                        variant="success"
+                        @dismissed="submitSuccess=false">
+                        <p>Changes submitted successfully!</p>
+                    </b-alert>
+                </main>
             </div>
-        </main>
+        </div>
     </div>
 </template>
 
@@ -95,12 +101,25 @@ export default {
 </script>
 
 <style>
+html, body {
+    margin: 0;
+    height: 100%;
+}
 #app {
     font-family: 'Avenir', 'Nunito Sans', Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
+    height: 100%;
+    max-height: 100%;
 }
 
+main {
+    padding-top: 48px;
+}
+
+.navbar {
+    z-index: 100;
+}
 </style>

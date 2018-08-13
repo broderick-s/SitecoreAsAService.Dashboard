@@ -1,7 +1,7 @@
 <template>
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            <h1 class="collection" >{{ collection.CollectionName }}</h1>
+            <h1 class="collection pl-4" >{{ collection.CollectionName }}</h1>
         </div>
         <b-form @submit="submit">
             <template v-for="parameter in updatedCollection.Parameters">
@@ -9,7 +9,9 @@
                     class="row input-wrapper"
                     :key="parameter.SitecoreFieldID" >
                     <label class="col-md-6 text-left">
-                        {{ parameter.Name }}
+                        <div class="my-2 label">
+                            <i class="accent"></i><span class="pl-2">{{ parameter.Name }}</span>
+                        </div>
                         <component
                             :is="getComponentType(parameter.ControlType, parameter.PossibleValues)"
                             v-model="parameter.SelectedValue"
@@ -21,9 +23,9 @@
             </template>
             <div class="row">
                 <b-button 
-                    class="offset-5" 
+                    class="offset-5 xc-button" 
                     size="md"
-                    variant="outline-success"
+                    variant="success"
                     type="submit">
                     Submit
                 </b-button>
@@ -110,37 +112,41 @@ export default {
 </script>
 
 <style>
-.input-wrapper {
-    margin: 20px;
+.inputs {
+    border-radius: 0;
 }
 
-.collection {	
-    height: 36px;	
-    width: 195px;	
+.input-wrapper {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 0;
+}
+
+.xc-button {
+    border-radius: 0;
+    background-color: #8399A8;
+    border-color: #8399A8;
+}
+
+.collection {		
     color: #35434B;	
     font-family: 'Nunito Sans', sans-serif;	
     font-size: 24px;	
-    font-weight: 900;	
-    line-height: 36px;
+    font-weight: 900;
 }
 
 .label {
-	height: 26px;
-	width: 123px;
 	color: #161E23;
 	font-family: 'Nunito Sans', sans-serif;
 	font-size: 16px;
-	letter-spacing: 1px;
-	line-height: 26px;
 }
 
-.label {
-	height: 26px;
-	width: 123px;
-	color: #161E23;
-	font-family: 'Nunito Sans', sans-serif;
-	font-size: 16px;
-	letter-spacing: 1px;
-	line-height: 26px;
+.accent {
+	width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 20px 20px 0 0;
+    border-color: #adbbc5 transparent transparent transparent;
+    float: left;
 }
 </style>
