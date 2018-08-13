@@ -10,7 +10,8 @@
                         class="cat-item" 
                         :class="activeCategory(catIndex)"
                         @click="selectCollection(catIndex, 0)">
-                        {{ category.Category }}
+                        <div class="offset-md-2 offset-lg-2 offset-xl-3"><IconGlobal /> {{ category.Category }}</div>
+                        
                     </div>
                     <a 
                         v-for="(collection, colIndex) in category.Item"
@@ -33,7 +34,12 @@
 </template>
 
 <script>
+import IconGlobal from '../icons/IconGlobal';
+
 export default {
+    components: {
+        IconGlobal
+    },
     props: {
         categories: {
             required: true,
@@ -113,12 +119,21 @@ export default {
     height: 60px;
     line-height: 60px;
     cursor: pointer;
-    font-weight: 600;
+    text-align: initial;
 }
 
 .cat-item.active {
     color: white;
     background-color: #11869B;
+}
+
+.cat-item.active svg {
+    margin-right: 26px;
+    vertical-align: text-top;
+}
+
+.cat-item.active svg path {
+    fill: white;
 }
 
 .square.active {	
@@ -133,12 +148,6 @@ export default {
     position: absolute;
     bottom: 30px;
     left: 0px;
-}
-
-/* Transition */
-.drop-enter-active, .drop-leave-active {
-    transition: max-height .5s linear;
-    border:0;
 }
 
 </style>
