@@ -127,7 +127,7 @@ export default {
     background-color: #11869B;
 }
 
-.cat-item.active svg {
+.cat-item svg {
     margin-right: 26px;
     vertical-align: text-top;
 }

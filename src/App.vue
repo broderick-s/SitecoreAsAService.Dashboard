@@ -30,15 +30,17 @@
                     class="col-md-9 ml-sm-auto col-lg-10 px-4 bg-light">
                     <Collection 
                         :collection="categories[selectedCategoryIndex].Item[selectedCollectionIndex]" 
-                        @submit="submitted"/>
-
+                        @submit="submitted"
+                        @alert="setAlert"
+                        @resetAlert="resetAlert"/>
+                    <br>
                     <b-alert 
                         class="offset-1 col-md-6"
-                        :show="submitSuccess"
+                        :show="alert"
                         dismissible
-                        variant="success"
-                        @dismissed="submitSuccess=false">
-                        <p>Changes submitted successfully!</p>
+                        :variant="alertType"
+                        @dismissed="alert=false">
+                        <p>{{ alertMessage }}</p>
                     </b-alert>
                 </main>
             </div>
@@ -50,7 +52,8 @@
 import SidebarNavigation from './components/navigation/SidebarNavigation';
 import Collection from './components/Collection';
 
-import { getData } from './data/data.js'
+import { getData } from './data/data.js';
+import { SUCCESS, SUBMIT_SUCCESS_MESSAGE, DANGER } from './constants.js';
 
 export default {
     name: "app",
@@ -66,12 +69,17 @@ export default {
             selectedCategoryIndex: 0,
             selectedCollectionIndex: 0,
             error: null,
-            submitSuccess: false
+
+            alert: false,
+            alertType: '',
+            alertMessage: ''
+
         }
     },
 
     methods: {
         changeCollection(catIndex, colIndex){
+            this.resetAlert()
             this.selectedCategoryIndex = catIndex;
             this.selectedCollectionIndex = colIndex;
         },
@@ -88,8 +96,18 @@ export default {
                     this.error = error;
             });
         },
+        setAlert(alertType, alertMessage) {
+            this.alert = true;
+            this.alertType = alertType;
+            this.alertMessage = alertMessage;
+        },
+        resetAlert() {
+            this.alert = false;
+            this.alertType = '';
+            this.alertMessage = '';
+        },
         submitted() {
-            this.submitSuccess = true;
+            this.setAlert(SUCCESS, SUBMIT_SUCCESS_MESSAGE);
             this.fetchData();
         }
     },

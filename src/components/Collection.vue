@@ -1,5 +1,10 @@
 <template>
-    <div class="container-fluid">
+    <div v-if="!collection">
+        <h1 class="collection pl-4" >No collections available for this category.</h1>
+    </div>
+    <div 
+        v-else
+        class="container-fluid">
         <div class="row">
             <h1 class="collection pl-4" >{{ collection.CollectionName }}</h1>
         </div>
@@ -13,7 +18,7 @@
                             <i class="accent"></i><span class="pl-2">{{ parameter.Name }}</span>
                         </div>
                         <component
-                            :is="getComponentType(parameter.ControlType, parameter.PossibleValues)"
+                            :is="getComponentType(parameter.ControlType, parameter.PossibleValues, parameter.FrontEndControl)"
                             v-model="parameter.SelectedValue"
                             :options="parameter.PossibleValues"
                             class="inputs" >
@@ -31,24 +36,23 @@
                 </b-button>
             </div>
         </b-form>
-        <br>
-        <div class="row">
-            <b-alert 
-                class="col-md-7"
-                :show="error"
-                dismissible
-                variant="danger"
-                @dismissed="error=false">
-                <p>{{ errorMessage }}</p>
-            </b-alert>
-        </div>
     </div>
 </template>
 
 <script>
+import ColorPicker from './inputs/ColorPicker';
+
 import { postData } from '../data/data.js';
+import {   
+    COLOR_PICKER_CONTROL, COLOR_PICKER_COMPONENT, 
+    SINGLE_LINE_CONTROL, B_SELECT_COMPONENT, 
+    B_SINGLE_LINE_COMPONENT, DANGER, SUBMIT_FAILURE_MESSAGE 
+} from '../constants.js';
 
 export default {
+    components: {
+        ColorPicker
+    },
     props: { 
         collection: {
             type: Object
@@ -71,16 +75,21 @@ export default {
     },
 
     methods: {
-        getComponentType(controlType, possibleValues) {
-            if (possibleValues && possibleValues.length > 0) {
-                return "b-form-select";
+        getComponentType(controlType, possibleValues, frontEndControl) {
+            // Special controls
+            switch (frontEndControl) {
+                case COLOR_PICKER_CONTROL:
+                    return COLOR_PICKER_COMPONENT;
             }
 
             switch (controlType) {
-                case "Single-Line Text": 
-                    return "b-form-input";
+                case SINGLE_LINE_CONTROL: 
+                    if (possibleValues && possibleValues.length > 0) {
+                        return B_SELECT_COMPONENT;
+                    }
+                    return B_SINGLE_LINE_COMPONENT;
             }
-            return "";
+            return '';
         },
 
         submit(evt) {
@@ -92,8 +101,7 @@ export default {
                     if (data) {
                         this.$emit('submit');
                     } else {
-                        this.error = true;
-                        this.errorMessage = "Unable to get data or no data available.";
+                        this.$emit('alert', DANGER, SUBMIT_FAILURE_MESSAGE)
                     }
                 })
                 .catch(error => {
@@ -105,9 +113,9 @@ export default {
         resetAlerts() {
             this.error = false;
             this.errorMessage = '';
-            this.$emit("resetAlerts");
+            this.$emit("resetAlert");
         }
-    } 
+    }
 };
 </script>
 
